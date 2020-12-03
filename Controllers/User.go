@@ -31,9 +31,8 @@ func CreateUser(c *gin.Context) {
 	c.BindJSON(&user)
 	err := models.CreateUser(&user)
 	if err != nil {
-		// fmt.Println(err.Error())
-		fmt.Println("hello, bad stuff here")
-		// c.AbortWithStatus(http.StatusNotFound)
+		fmt.Println(err.Error())
+		c.AbortWithStatus(http.StatusNotFound)
 	} else {
 		fmt.Println("user in User.go: ", user)
 		c.JSON(http.StatusOK, user)
