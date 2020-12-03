@@ -1,29 +1,31 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/contrib/static"
-	"github.com/gin-gonic/gin"
+
+	"fmt"
+
+	"github.com/jinzhu/gorm"
+	"github.com/lwood54/fullstack_explore/config"
+	"github.com/lwood54/fullstack_explore/models"
+	"github.com/lwood54/fullstack_explore/routes"
 )
 
+var err error
+
 func main() {
+	config.DB, err = gorm.Open("mysql", config.DbURL(config.BuildDBConfig()))
+	if err != nil {
+		fmt.Println("Status:", err)
+	}
+	defer config.DB.Close()
+	config.DB.AutoMigrate(&models.User{})
 	// Set the router as the default one shipped with Gin
-	router := gin.Default()
+	r := routes.SetupRouter()
 
 	// Serve frontend static files
-	router.Use(static.Serve("/", static.LocalFile("./client/build", true)))
-
-	// Setup route group for the API
-	api := router.Group("/api")
-	{
-		api.GET("/", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"message": "pong",
-			})
-		})
-	}
+	r.Use(static.Serve("/", static.LocalFile("./client/build", true)))
 
 	// Start and run the server
-	router.Run(":5000")
+	r.Run(":5000")
 }
