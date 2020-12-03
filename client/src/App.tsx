@@ -20,6 +20,9 @@ function App() {
     return response.json(); // parses JSON response into native JavaScript objects
   }
 
+  // TODO: cors issues, bad request, but it goes throug and adds user to DB
+  // when using build, cannot add user with same ID, when using development,
+  // still adds user with error, but automatically incriments the ID up one.
   const handleAddUser = () => {
     postData("http://localhost:5000/api/user", {
       Id: 10000,

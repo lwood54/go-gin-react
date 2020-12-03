@@ -36,7 +36,7 @@ func CreateUser(c *gin.Context) {
 	} else {
 		fmt.Println("user in User.go: ", user)
 		c.JSON(http.StatusOK, user)
-		return
+		// return
 	}
 }
 
