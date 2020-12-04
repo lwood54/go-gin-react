@@ -27,16 +27,17 @@ func GetUsers(c *gin.Context) {
 
 //CreateUser ... Create User
 func CreateUser(c *gin.Context) {
+	fmt.Println("check 1")
 	var user models.User
 	c.BindJSON(&user)
 	err := models.CreateUser(&user)
 	if err != nil {
+		fmt.Println("check 2, has error")
 		fmt.Println(err.Error())
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
 		fmt.Println("user in User.go: ", user)
 		c.JSON(http.StatusOK, user)
-		// return
 	}
 }
 
@@ -49,6 +50,11 @@ func GetUserByID(c *gin.Context) {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
 		c.JSON(http.StatusOK, user)
+		// c.JSON(http.StatusOK, gin.H{
+		// 	"status":  "posted",
+		// 	"message": "Hello Full Stack Go",
+		// 	"logan":   "Logan",
+		// })
 	}
 }
 
