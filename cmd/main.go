@@ -25,6 +25,8 @@ func main() {
 	config.DB.AutoMigrate(&models.User{})
 	// Set the router as the default one shipped with Gin
 	r := routes.SetupRouter()
+
+	// example: https://github.com/gin-contrib/cors
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"PUT", "PATCH", "GET", "POST", "OPTIONS", "DELETE"},
