@@ -1,13 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"time"
 
-	"github.com/gin-gonic/contrib/static"
-
-	"fmt"
-
 	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/contrib/static"
 	"github.com/jinzhu/gorm"
 	"github.com/lwood54/fullstack_explore/config"
 	"github.com/lwood54/fullstack_explore/models"

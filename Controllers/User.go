@@ -27,6 +27,7 @@ func GetUsers(c *gin.Context) {
 
 //CreateUser ... Create User
 func CreateUser(c *gin.Context) {
+
 	fmt.Println("check 1")
 	var user models.User
 	c.BindJSON(&user)
