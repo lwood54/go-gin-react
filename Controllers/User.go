@@ -17,11 +17,6 @@ func GetUsers(c *gin.Context) {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
 		c.JSON(http.StatusOK, user)
-		// c.JSON(http.StatusOK, gin.H{
-		// 	"status":  "posted",
-		// 	"message": "Hello Full Stack Go",
-		// 	"logan":   "Logan",
-		// })
 	}
 }
 
@@ -37,8 +32,11 @@ func CreateUser(c *gin.Context) {
 		fmt.Println(err.Error())
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
-		fmt.Println("user in User.go: ", user)
 		c.JSON(http.StatusOK, user)
+		// c.JSON(200, gin.H{
+		// 	"message": "User Created Successfully",
+		// 	"user":    user,
+		// })
 	}
 }
 
@@ -47,15 +45,15 @@ func GetUserByID(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var user models.User
 	err := models.GetUserByID(&user, id)
+	fmt.Println("err: ", err, " | ", id)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
-		c.JSON(http.StatusOK, user)
-		// c.JSON(http.StatusOK, gin.H{
-		// 	"status":  "posted",
-		// 	"message": "Hello Full Stack Go",
-		// 	"logan":   "Logan",
-		// })
+		// c.JSON(http.StatusOK, user)
+		c.JSON(200, gin.H{
+			"message": "User Found Successfully",
+			"user":    user.Name,
+		})
 	}
 }
 
