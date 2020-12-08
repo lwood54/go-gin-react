@@ -22,17 +22,18 @@ func GetUsers(c *gin.Context) {
 
 //CreateUser ... Create User
 func CreateUser(c *gin.Context) {
-
-	fmt.Println("check 1")
 	var user models.User
 	c.BindJSON(&user)
 	err := models.CreateUser(&user)
 	if err != nil {
-		fmt.Println("check 2, has error")
 		fmt.Println(err.Error())
-		c.AbortWithStatus(http.StatusNotFound)
+		fmt.Println(err)
+		// c.AbortWithStatus(http.StatusNotFound)
+		c.JSON(http.StatusNotFound, gin.H{
+			"message": "There was an issue creating user.",
+			"error":   err,
+		})
 	} else {
-		// c.JSON(http.StatusOK, user)
 		c.JSON(200, gin.H{
 			"message": "User Created Successfully",
 			"user":    user,
