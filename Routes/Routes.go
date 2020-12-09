@@ -20,5 +20,3 @@ func SetupRouter() *gin.Engine {
 	}
 	return r
 }
-
-// http://localhost:3000/api/user/:276

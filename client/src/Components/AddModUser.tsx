@@ -23,8 +23,6 @@ function AddModUser({ userAction }: UserAction) {
   const [phone, setPhone] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  console.log(userAction);
-
   function handleUserInput(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value;
     switch (e.target.name) {
@@ -75,7 +73,6 @@ function AddModUser({ userAction }: UserAction) {
       phone,
       password,
     };
-    console.log("data: ", data);
     const isBlankList: Array<undefined | number | string> = [];
     for (const [i, v] of Object.entries(data)) {
       if (v === "" || v === undefined) {
@@ -94,6 +91,28 @@ function AddModUser({ userAction }: UserAction) {
           console.log("error: ", err);
         });
     }
+  };
+
+  const handleUpdateUser = () => {
+    const data = {
+      id: createId,
+      lastName,
+      firstName,
+      email,
+      phone,
+      password,
+    };
+
+    fetch(`/api/user/${data.id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: { "Content-type": "application/json; charset=UTF-8" },
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((err) => {
+        console.log("error: ", err);
+      });
   };
 
   return (
@@ -134,7 +153,9 @@ function AddModUser({ userAction }: UserAction) {
           <input type="text" name="password" onChange={handleUserInput} />
         </label>
       </FormItemSC>
-      <button onClick={handleAddUser}>Add User</button>
+      <FormItemSC>
+        {userAction === "add" ? <button onClick={handleAddUser}>Add User</button> : <button onClick={handleUpdateUser}>Update</button>}
+      </FormItemSC>
     </ContainerSC>
   );
 }

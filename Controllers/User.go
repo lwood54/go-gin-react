@@ -27,7 +27,6 @@ func CreateUser(c *gin.Context) {
 	err := models.CreateUser(&user)
 	if err != nil {
 		fmt.Println(err.Error())
-		fmt.Println(err)
 		// c.AbortWithStatus(http.StatusNotFound)
 		c.JSON(http.StatusNotFound, gin.H{
 			"message": "There was an issue creating user.",
