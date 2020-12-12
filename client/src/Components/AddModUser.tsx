@@ -138,6 +138,39 @@ function AddModUser({ userAction }: UserAction) {
     }
   };
 
+  const handleDeleteUser = () => {
+    const deleteUser: Promise = async () => {
+      const response = await fetch(`/api/user/${createId}`, {
+        method: "DELETE",
+        // body: JSON.stringify(data),
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      });
+      const resMessage = await response.json();
+      console.log("delete response: ", resMessage);
+    };
+    try {
+      deleteUser();
+    } catch (error) {
+      console.log("ERROR: ", error);
+    }
+  };
+
+  const handleUserAction = () => {
+    switch (userAction) {
+      case "add":
+        handleAddUser();
+        break;
+      case "update":
+        handleUpdateUser();
+        break;
+      case "delete":
+        handleDeleteUser();
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <ContainerSC>
       <FormItemSC>
@@ -146,38 +179,43 @@ function AddModUser({ userAction }: UserAction) {
           <input type="text" name="idInput" onChange={handleUserInput} />
         </label>
       </FormItemSC>
+      {userAction === "delete" ? null : (
+        <>
+          <FormItemSC>
+            <label>
+              Last Name
+              <input type="text" name="lastName" onChange={handleUserInput} />
+            </label>
+          </FormItemSC>
+          <FormItemSC>
+            <label>
+              First Name
+              <input type="text" name="firstName" onChange={handleUserInput} />
+            </label>
+          </FormItemSC>
+          <FormItemSC>
+            <label>
+              Email
+              <input type="text" name="email" onChange={handleUserInput} />
+            </label>
+          </FormItemSC>
+          <FormItemSC>
+            <label>
+              Phone
+              <input type="text" name="phone" onChange={handleUserInput} />
+            </label>
+          </FormItemSC>
+          <FormItemSC>
+            <label>
+              Password
+              <input type="text" name="password" onChange={handleUserInput} />
+            </label>
+          </FormItemSC>
+        </>
+      )}
+
       <FormItemSC>
-        <label>
-          Last Name
-          <input type="text" name="lastName" onChange={handleUserInput} />
-        </label>
-      </FormItemSC>
-      <FormItemSC>
-        <label>
-          First Name
-          <input type="text" name="firstName" onChange={handleUserInput} />
-        </label>
-      </FormItemSC>
-      <FormItemSC>
-        <label>
-          Email
-          <input type="text" name="email" onChange={handleUserInput} />
-        </label>
-      </FormItemSC>
-      <FormItemSC>
-        <label>
-          Phone
-          <input type="text" name="phone" onChange={handleUserInput} />
-        </label>
-      </FormItemSC>
-      <FormItemSC>
-        <label>
-          Password
-          <input type="text" name="password" onChange={handleUserInput} />
-        </label>
-      </FormItemSC>
-      <FormItemSC>
-        {userAction === "add" ? <button onClick={handleAddUser}>Add User</button> : <button onClick={handleUpdateUser}>Update</button>}
+        <button onClick={handleUserAction}>{userAction}</button>
       </FormItemSC>
     </ContainerSC>
   );

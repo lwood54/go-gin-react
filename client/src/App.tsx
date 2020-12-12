@@ -11,11 +11,12 @@ function App() {
   }
   return (
     <div className="App">
-      <h1>To Do Tree</h1>
+      <h1>Bills Tracker</h1>
       <h3>Action</h3>
       <select name="useraction" onChange={handleAction}>
-        <option value="add">add new user</option>
-        <option value="update"> update user</option>
+        <option value="add">Add User</option>
+        <option value="update">Update User</option>
+        <option value="delete">Delete User</option>
       </select>
       <AddModUser userAction={userAction} />
       <GetUser />
