@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { UserAction } from "../Types/User";
+import { User, UserAction, Promise, EditUserResponse } from "../Types/User";
+import { Actions, UserField, URLPaths, DefaultUser } from "../Constants/Constants";
 
 const ContainerSC: React.FC = styled.div`
   align-items: center;
@@ -15,47 +16,42 @@ const FormItemSC: React.FC = styled.div`
   width: 100%;
 `;
 
-function AddModUser({ userAction }: UserAction) {
-  const [createId, setCreateId] = useState<number>();
-  const [lastName, setLastName] = useState<string>("");
-  const [firstName, setFirstName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [phone, setPhone] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+function EditUser({ userAction }: UserAction) {
+  const [userData, setUserData] = useState<User>(DefaultUser);
 
   function handleUserInput(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value;
     switch (e.target.name) {
-      case "idInput":
+      case UserField.ID_INPUT:
         if (parseInt(val)) {
           console.log(parseInt(val));
-          let id = parseInt(val, 10);
-          setCreateId(id);
+          let idInput = parseInt(val, 10);
+          setUserData({ ...userData, id: idInput });
         }
         break;
-      case "lastName":
+      case UserField.LAST_NAME:
         if (typeof val === "string") {
-          setLastName(val);
+          setUserData({ ...userData, lastName: val });
         }
         break;
-      case "firstName":
+      case UserField.FIRST_NAME:
         if (typeof val === "string") {
-          setFirstName(val);
+          setUserData({ ...userData, firstName: val });
         }
         break;
-      case "email":
+      case UserField.EMAIL:
         if (typeof val === "string") {
-          setEmail(val);
+          setUserData({ ...userData, email: val });
         }
         break;
-      case "phone":
+      case UserField.PHONE:
         if (typeof val === "string") {
-          setPhone(val);
+          setUserData({ ...userData, phone: val });
         }
         break;
-      case "password":
+      case UserField.PASSWORD:
         if (typeof val === "string") {
-          setPassword(val);
+          setUserData({ ...userData, password: val });
         }
         break;
 
@@ -63,45 +59,22 @@ function AddModUser({ userAction }: UserAction) {
         break;
     }
   }
-  interface User {
-    id: number;
-    lastName: string;
-    firstName: string;
-    email: string;
-    phone: string;
-    password: string;
-  }
-
-  interface AddResponse {
-    message: string;
-    user: User;
-  }
-
-  type Promise = () => void;
 
   const handleAddUser = () => {
-    const data = {
-      id: createId,
-      lastName,
-      firstName,
-      email,
-      phone,
-      password,
-    };
     const isBlankList: Array<undefined | number | string> = [];
-    for (const [i, v] of Object.entries(data)) {
+    for (const [i, v] of Object.entries(userData)) {
       if (v === "" || v === undefined) {
         isBlankList.push(i);
       }
     }
     if (isBlankList.length <= 0) {
       const postUser: Promise = async () => {
-        const response = await fetch("/api/user", {
+        const response = await fetch(URLPaths.API_USER, {
           method: "POST",
-          body: JSON.stringify(data),
+          body: JSON.stringify(userData),
           headers: { "Content-type": "application/json; charset=UTF-8" },
         });
-        const resultData: AddResponse = await response.json();
+        const resultData: EditUserResponse = await response.json();
         console.log("resultData in addUser: ", resultData);
       };
       try {
@@ -113,22 +86,13 @@ function AddModUser({ userAction }: UserAction) {
   };
 
   const handleUpdateUser = () => {
-    const data = {
-      id: createId,
-      lastName,
-      firstName,
-      email,
-      phone,
-      password,
-    };
-
     const updateUser: Promise = async () => {
-      const response = await fetch(`/api/user/${data.id}`, {
+      const response = await fetch(`${URLPaths.API_USER}${userData.id}`, {
         method: "PUT",
-        body: JSON.stringify(data),
+        body: JSON.stringify(userData),
         headers: { "Content-type": "application/json; charset=UTF-8" },
       });
-      const responseData: AddResponse = await response.json();
+      const responseData: EditUserResponse = await response.json();
       console.log("update response: ", responseData);
     };
     try {
@@ -140,12 +104,12 @@ function AddModUser({ userAction }: UserAction) {
 
   const handleDeleteUser = () => {
     const deleteUser: Promise = async () => {
-      const response = await fetch(`/api/user/${createId}`, {
+      const response = await fetch(`${URLPaths.API_USER}${userData.id}`, {
         method: "DELETE",
         // body: JSON.stringify(data),
         headers: { "Content-type": "application/json; charset=UTF-8" },
       });
-      const resMessage = await response.json();
+      const resMessage: EditUserResponse = await response.json();
       console.log("delete response: ", resMessage);
     };
     try {
@@ -157,13 +121,13 @@ function AddModUser({ userAction }: UserAction) {
 
   const handleUserAction = () => {
     switch (userAction) {
-      case "add":
+      case Actions.ADD:
         handleAddUser();
         break;
-      case "update":
+      case Actions.UPDATE:
         handleUpdateUser();
         break;
-      case "delete":
+      case Actions.DELETE:
         handleDeleteUser();
         break;
       default:
@@ -176,7 +140,7 @@ function AddModUser({ userAction }: UserAction) {
       <FormItemSC>
         <label>
           ID
-          <input type="text" name="idInput" onChange={handleUserInput} />
+          <input type="text" name={UserField.ID_INPUT} onChange={handleUserInput} />
         </label>
       </FormItemSC>
       {userAction === "delete" ? null : (
@@ -184,31 +148,31 @@ function AddModUser({ userAction }: UserAction) {
           <FormItemSC>
             <label>
               Last Name
-              <input type="text" name="lastName" onChange={handleUserInput} />
+              <input type="text" name={UserField.LAST_NAME} onChange={handleUserInput} />
             </label>
           </FormItemSC>
           <FormItemSC>
             <label>
               First Name
-              <input type="text" name="firstName" onChange={handleUserInput} />
+              <input type="text" name={UserField.FIRST_NAME} onChange={handleUserInput} />
             </label>
           </FormItemSC>
           <FormItemSC>
             <label>
               Email
-              <input type="text" name="email" onChange={handleUserInput} />
+              <input type="text" name={UserField.EMAIL} onChange={handleUserInput} />
             </label>
           </FormItemSC>
           <FormItemSC>
             <label>
               Phone
-              <input type="text" name="phone" onChange={handleUserInput} />
+              <input type="text" name={UserField.PHONE} onChange={handleUserInput} />
             </label>
           </FormItemSC>
           <FormItemSC>
             <label>
               Password
-              <input type="text" name="password" onChange={handleUserInput} />
+              <input type="text" name={UserField.PASSWORD} onChange={handleUserInput} />
             </label>
           </FormItemSC>
         </>
@@ -221,4 +185,4 @@ function AddModUser({ userAction }: UserAction) {
   );
 }
 
-export default AddModUser;
+export default EditUser;

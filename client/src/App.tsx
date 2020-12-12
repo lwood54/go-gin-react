@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import AddModUser from "./Components/AddModUser";
+import EditUser from "./Components/EditUser";
 import GetUser from "./Components/GetUser";
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
         <option value="update">Update User</option>
         <option value="delete">Delete User</option>
       </select>
-      <AddModUser userAction={userAction} />
+      <EditUser userAction={userAction} />
       <GetUser />
     </div>
   );
