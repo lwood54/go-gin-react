@@ -35,10 +35,10 @@ func GetUserByID(user *User, id string) (err error) {
 
 //UpdateUser ... Update user
 func UpdateUser(user *User, id string) (err error) {
-	// TODO: handle when some fields are blank
-	// should allow blank fields to remain as original
 	fmt.Println("user: ", user)
+	// Save() replaces entire object
 	// config.DB.Save(user)
+	// Model(user).Updates(user) will only save non-zero fields
 	config.DB.Model(user).Updates(user)
 	return nil
 }

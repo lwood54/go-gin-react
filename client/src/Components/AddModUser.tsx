@@ -63,6 +63,21 @@ function AddModUser({ userAction }: UserAction) {
         break;
     }
   }
+  interface User {
+    id: number;
+    lastName: string;
+    firstName: string;
+    email: string;
+    phone: string;
+    password: string;
+  }
+
+  interface AddResponse {
+    message: string;
+    user: User;
+  }
+
+  type Promise = () => void;
 
   const handleAddUser = () => {
     const data = {
@@ -80,16 +95,20 @@ function AddModUser({ userAction }: UserAction) {
       }
     }
     if (isBlankList.length <= 0) {
-      fetch("/api/user", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-type": "application/json; charset=UTF-8" },
-      })
-        .then((response) => response.json())
-        .then((data) => console.log(data))
-        .catch((err) => {
-          console.log("error: ", err);
+      const postUser: Promise = async () => {
+        const response = await fetch("/api/user", {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: { "Content-type": "application/json; charset=UTF-8" },
         });
+        const resultData: AddResponse = await response.json();
+        console.log("resultData in addUser: ", resultData);
+      };
+      try {
+        postUser();
+      } catch (error) {
+        console.log("ERROR: ", error);
+      }
     }
   };
 
@@ -103,16 +122,20 @@ function AddModUser({ userAction }: UserAction) {
       password,
     };
 
-    fetch(`/api/user/${data.id}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
-      headers: { "Content-type": "application/json; charset=UTF-8" },
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((err) => {
-        console.log("error: ", err);
+    const updateUser: Promise = async () => {
+      const response = await fetch(`/api/user/${data.id}`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+        headers: { "Content-type": "application/json; charset=UTF-8" },
       });
+      const responseData: AddResponse = await response.json();
+      console.log("update response: ", responseData);
+    };
+    try {
+      updateUser();
+    } catch (error) {
+      console.log("ERROR: ", error);
+    }
   };
 
   return (
