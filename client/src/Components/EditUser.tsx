@@ -120,12 +120,12 @@ function EditUser({ userAction }: UserAction) {
   };
 
   const handleLogin = () => {
-    console.log("logging in...");
-    const loginData = { email: userData.email, password: userData.password };
+    // can I just send data object of login info
+    // when should I encrypt password, unsafe to pass actual password in header?
+    // const loginData = { email: userData.email, password: userData.password };
     const login: Promise = async () => {
       const response = await fetch(`${URLPaths.API_LOGIN}${userData.email}/${userData.password}`, {
         method: "GET",
-        // body: JSON.stringify(loginData),
         headers: { "Content-type": "application/json; charset=UTF-8" },
       });
       const resMessage: EditUserResponse = await response.json();
