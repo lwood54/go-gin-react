@@ -18,7 +18,3 @@ export interface EditUserResponse {
   message: string;
   user: User;
 }
-
-// export interface UserDetails {
-
-// }
