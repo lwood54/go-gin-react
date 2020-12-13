@@ -12,6 +12,7 @@ func SetupRouter() *gin.Engine {
 	r := gin.Default()
 	grp1 := r.Group("/api")
 	{
+		grp1.GET("login/:email/:password", controllers.Login)
 		grp1.GET("user", controllers.GetUsers)
 		grp1.POST("user", controllers.CreateUser)
 		grp1.GET("user/:id", controllers.GetUserByID)

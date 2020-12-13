@@ -33,6 +33,15 @@ func GetUserByID(user *User, id string) (err error) {
 	return nil
 }
 
+// GetUserByLogin ... Fetch only one user by email and password
+func GetUserByLogin(user *User, email string, password string) (err error) {
+	fmt.Println("user before processing: ", user)
+	if err = config.DB.Where("email = ?", email).Where("password = ?", password).First(user).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 //UpdateUser ... Update user
 func UpdateUser(user *User, id string) (err error) {
 	fmt.Println("user: ", user)

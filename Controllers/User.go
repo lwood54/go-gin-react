@@ -58,6 +58,26 @@ func GetUserByID(c *gin.Context) {
 	}
 }
 
+// Login ... Get the user with email and password
+func Login(c *gin.Context) {
+	email := c.Params.ByName("email")
+	password := c.Params.ByName("password")
+	var user models.User
+	fmt.Println("email: ", email, " | password: ", password)
+	err := models.GetUserByLogin(&user, email, password)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"message": "Login not successful, please provide different credentials.",
+		})
+	} else {
+		// todo: generate JWT after confirmed email and password match
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Login Success",
+			"user":    user,
+		})
+	}
+}
+
 //UpdateUser ... Update the user information
 func UpdateUser(c *gin.Context) {
 	var user models.User

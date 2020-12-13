@@ -1,7 +1,8 @@
 export enum Actions {
   ADD = "add",
   UPDATE = "update",
-  DELETE = "delete"
+  DELETE = "delete",
+  LOGIN = "login"
 }
 
 export enum UserField {
@@ -15,7 +16,8 @@ export enum UserField {
 }
 
 export enum URLPaths {
-  API_USER = "/api/user/"
+  API_USER = "/api/user/",
+  API_LOGIN = "/api/login/"
 }
 
 export const DefaultUser = {

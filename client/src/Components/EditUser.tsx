@@ -119,6 +119,25 @@ function EditUser({ userAction }: UserAction) {
     }
   };
 
+  const handleLogin = () => {
+    console.log("logging in...");
+    const loginData = { email: userData.email, password: userData.password };
+    const login: Promise = async () => {
+      const response = await fetch(`${URLPaths.API_LOGIN}${userData.email}/${userData.password}`, {
+        method: "GET",
+        // body: JSON.stringify(loginData),
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      });
+      const resMessage: EditUserResponse = await response.json();
+      console.log("login response: ", resMessage);
+    };
+    try {
+      login();
+    } catch (error) {
+      console.log("ERROR: ", error);
+    }
+  };
+
   const handleUserAction = () => {
     switch (userAction) {
       case Actions.ADD:
@@ -131,6 +150,7 @@ function EditUser({ userAction }: UserAction) {
         handleDeleteUser();
         break;
       default:
+        handleLogin();
         break;
     }
   };
@@ -139,12 +159,24 @@ function EditUser({ userAction }: UserAction) {
     <ContainerSC>
       <FormItemSC>
         <label>
-          ID
-          <input type="text" name={UserField.ID_INPUT} onChange={handleUserInput} />
+          Email
+          <input type="text" name={UserField.EMAIL} onChange={handleUserInput} />
         </label>
       </FormItemSC>
-      {userAction === "delete" ? null : (
+      <FormItemSC>
+        <label>
+          Password
+          <input type="text" name={UserField.PASSWORD} onChange={handleUserInput} />
+        </label>
+      </FormItemSC>
+      {userAction === Actions.LOGIN ? null : (
         <>
+          <FormItemSC>
+            <label>
+              ID
+              <input type="text" name={UserField.ID_INPUT} onChange={handleUserInput} />
+            </label>
+          </FormItemSC>
           <FormItemSC>
             <label>
               Last Name
@@ -157,29 +189,18 @@ function EditUser({ userAction }: UserAction) {
               <input type="text" name={UserField.FIRST_NAME} onChange={handleUserInput} />
             </label>
           </FormItemSC>
-          <FormItemSC>
-            <label>
-              Email
-              <input type="text" name={UserField.EMAIL} onChange={handleUserInput} />
-            </label>
-          </FormItemSC>
+
           <FormItemSC>
             <label>
               Phone
               <input type="text" name={UserField.PHONE} onChange={handleUserInput} />
             </label>
           </FormItemSC>
-          <FormItemSC>
-            <label>
-              Password
-              <input type="text" name={UserField.PASSWORD} onChange={handleUserInput} />
-            </label>
-          </FormItemSC>
         </>
       )}
 
       <FormItemSC>
-        <button onClick={handleUserAction}>{userAction}</button>
+        <button onClick={handleUserAction}>Submit</button>
       </FormItemSC>
     </ContainerSC>
   );
