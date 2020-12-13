@@ -106,7 +106,6 @@ function EditUser({ userAction }: UserAction) {
     const deleteUser: Promise = async () => {
       const response = await fetch(`${URLPaths.API_USER}${userData.id}`, {
         method: "DELETE",
-        // body: JSON.stringify(data),
         headers: { "Content-type": "application/json; charset=UTF-8" },
       });
       const resMessage: EditUserResponse = await response.json();

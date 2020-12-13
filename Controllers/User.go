@@ -22,6 +22,8 @@ func GetUsers(c *gin.Context) {
 
 //CreateUser ... Create User
 func CreateUser(c *gin.Context) {
+	// todo: need to check that email is unique and autogenerate IDs
+	// user should  not select id or have email that is duplicate
 	var user models.User
 	c.BindJSON(&user)
 	err := models.CreateUser(&user)
@@ -63,7 +65,6 @@ func Login(c *gin.Context) {
 	email := c.Params.ByName("email")
 	password := c.Params.ByName("password")
 	var user models.User
-	fmt.Println("email: ", email, " | password: ", password)
 	err := models.GetUserByLogin(&user, email, password)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
